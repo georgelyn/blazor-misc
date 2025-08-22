@@ -1,0 +1,79 @@
+@page "/convert"
+
+@using Misc.Utilities
+@using System.Text
+@using System.Text.Json
+@using System.Text.RegularExpressions
+@using System.ComponentModel.DataAnnotations.Schema
+
+<PageTitle>Class to Json</PageTitle>
+
+<div class="class-area">
+    <div class="mb-3">
+        <label for="class-txt" class="form-label">C# Class</label>
+        <textarea class="form-control" id="class-txt" rows="10" @bind="classString"></textarea>
+    </div>
+    <button type="button" class="btn btn-primary" @onclick="Convert">Convert</button>
+</div>
+
+@if (!string.IsNullOrWhiteSpace(json))
+{
+    <div class="json-area">
+        <button type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="Copy text"
+            @onclick="CopyText">
+            @(isCopied ? "Text copied" : "Copy")
+        </button>
+        <span id="copy-text" class="copy-text">@json</span>
+    </div>
+}
+
+@code {
+
+    private string classString = string.Empty;
+    private string json = string.Empty;
+    private bool isCopied = false;
+    private string dataTypePattern = @"public\s+([\w<>\[\],\s?]+)\s+(\w+)";
+
+    [Inject]
+    private IJSRuntime? JS { get; set; }
+
+    private JsonSerializerOptions jsonOptions = new JsonSerializerOptions { WriteIndented = true };
+
+    private void Convert()
+    {
+        if (string.IsNullOrWhiteSpace(classString))
+            return;
+
+        var validDataTypes = Helpers.GetSimpleDataTypes();
+        string[] lines = classString.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
+        var response = new List<string>();
+
+        foreach (var line in lines)
+        {
+            var match = Regex.Match(line, dataTypePattern);
+            if (!match.Success)
+                continue;
+
+            var dataType = match.Groups[1].Value.Trim(); 
+            string propertyName = match.Groups[2].Value.Trim();
+            if (string.IsNullOrWhiteSpace(propertyName) || !line.Contains("get; set;"))
+                continue;
+
+            response.Add($@"""{char.ToLower(propertyName[0]) + propertyName.Substring(1)}"":""{Helpers.GetMappedDataTypes(dataType)}""");
+        }
+
+        var responseString = string.Join(",", response.ToArray());
+        if (!string.IsNullOrWhiteSpace(responseString))
+        {
+            json = "{" + responseString + "}";
+        }
+    }
+
+    private async Task CopyText()
+    {
+        isCopied = true;
+        await JS!.InvokeVoidAsync("copyToClipboard");
+        await Task.Delay(3000);
+        isCopied = false;
+    }
+}

@@ -1,0 +1,27 @@
+.class-area {
+    display: flex;
+    flex-direction: column;
+}
+
+.class-area button {
+    justify-items: right;
+}
+
+.json-area {
+    display: flex;
+    flex-direction: column;
+    margin-top: 2em;
+    padding: 1em;
+    min-width: 200px;
+    border: 1px solid #88888a;
+    border-radius: 0.5em;
+    background-color: #e6e6ed;
+}
+
+.json-area button {
+    margin-left: auto;
+}
+
+.copy-text {
+    font-family: monospace;
+}
