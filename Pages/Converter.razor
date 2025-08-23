@@ -18,12 +18,18 @@
 
 @if (!string.IsNullOrWhiteSpace(json))
 {
-    <div class="json-area">
-        <button type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="Copy text"
-            @onclick="CopyText">
-            @(isCopied ? "Text copied" : "Copy")
-        </button>
-        <span id="copy-text" class="copy-text">@json</span>
+    <div class="json-area mb-3">
+        <div class="json-area_btn">
+            <button type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="Copy text"
+                @onclick="CopyText">
+                @(isCopied ? "Text copied" : "Copy")
+            </button>
+            <button type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="Format JSON"
+                @onclick="FormatJson">
+                Format
+            </button>
+        </div>
+        <pre id="copy-text" class="copy-text">@json</pre>
     </div>
 }
 
@@ -33,21 +39,23 @@
     private string json = string.Empty;
     private bool isCopied = false;
     private string dataTypePattern = @"public\s+([\w<>\[\],\s?]+)\s+(\w+)";
+    private JsonSerializerOptions serializerOptions = new JsonSerializerOptions
+    {
+        WriteIndented = true,
+        Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+    };
 
     [Inject]
     private IJSRuntime? JS { get; set; }
 
-    private JsonSerializerOptions jsonOptions = new JsonSerializerOptions { WriteIndented = true };
-
     private void Convert()
     {
+        json = string.Empty;
         if (string.IsNullOrWhiteSpace(classString))
             return;
 
-        var validDataTypes = Helpers.GetSimpleDataTypes();
         string[] lines = classString.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
         var response = new List<string>();
-
         foreach (var line in lines)
         {
             var match = Regex.Match(line, dataTypePattern);
@@ -56,10 +64,10 @@
 
             var dataType = match.Groups[1].Value.Trim(); 
             string propertyName = match.Groups[2].Value.Trim();
-            if (string.IsNullOrWhiteSpace(propertyName) || !line.Contains("get; set;"))
+            if (string.IsNullOrWhiteSpace(propertyName) || !line.Contains("get;"))
                 continue;
 
-            response.Add($@"""{char.ToLower(propertyName[0]) + propertyName.Substring(1)}"":""{Helpers.GetMappedDataTypes(dataType)}""");
+            response.Add($@"""{char.ToLower(propertyName[0]) + propertyName.Substring(1)}"":""{Helpers.GetMappedDataType(dataType)}""");
         }
 
         var responseString = string.Join(",", response.ToArray());
@@ -75,5 +83,15 @@
         await JS!.InvokeVoidAsync("copyToClipboard");
         await Task.Delay(3000);
         isCopied = false;
+    }
+
+    private void FormatJson()
+    {
+        try
+        {
+            using var doc = JsonDocument.Parse(json);
+            json = JsonSerializer.Serialize(doc, serializerOptions);
+        }
+        catch { }
     }
 }

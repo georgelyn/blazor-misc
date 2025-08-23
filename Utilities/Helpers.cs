@@ -1,30 +1,26 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
 namespace Misc.Utilities
 {
     public static class Helpers
     {
+       private static readonly string[] _dataTypes = ["double", "decimal", "int", "float", "string", "bool", "datetime"];
 
-        public static List<string> GetSimpleDataTypes()
+        public static string GetMappedDataType(string type)
         {
-            var dataTypes = new string[] { "double", "decimal", "int", "float", "string", "bool", "datetime" };
-            var response = new List<string>();
-            foreach (var type in dataTypes)
+            var isNullable = type.Contains("?");
+            var cleanString = type.Replace("?", string.Empty);
+            switch (cleanString.ToLower())
             {
-                response.Add(type);
-                response.Add($"{type}?");
+                case "double":
+                case "decimal":
+                case "float":
+                case "int":
+                case "long":
+                    return $"number{(isNullable ? "?" : string.Empty)}";
+                case "datetime":
+                    return $"date{(isNullable ? "?" : string.Empty)}";
+                default:
+                    return type;
             }
-
-            return response;
-        }
-
-        public static string GetMappedDataTypes(string dataType)
-        {
-            var isSimpleType = GetSimpleDataTypes().Any(d => dataType.Contains(d, StringComparison.OrdinalIgnoreCase));
-            return isSimpleType ? dataType.ToLower() : dataType;
         }
     }
 }
