@@ -1,0 +1,35 @@
+stages:
+    - build
+    - deploy
+
+build-job:
+  stage: build
+  image: mcr.microsoft.com/dotnet/sdk:9.0
+  script:
+    - dotnet publish -c Release -r browser-wasm --self-contained true /p:PublishTrimmed=true
+  artifacts:
+        paths:
+            - bin/Release/net9.0/publish/wwwroot
+        expire_in: 5 min
+
+deploy-dev:
+  stage: deploy
+  rules:
+    - if: $CI_COMMIT_BRANCH == "develop"
+  image: node:lts-alpine
+  script:
+    - npm i -g firebase-tools
+    - firebase use --token $FIREBASE_TOKEN dev
+    - firebase deploy --only hosting
+  environment: development
+
+deploy-prod:
+  stage: deploy
+  rules:
+    - if: $CI_COMMIT_BRANCH == "master"
+  image: node:lts-alpine
+  script:
+    - npm i -g firebase-tools
+    - firebase use --token $FIREBASE_TOKEN prod
+    - firebase deploy --only hosting
+  environment: production

@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "misc-blazor"
+    "prod": "misc-blazor",
+    "dev": "misc-blazor-dev"
   }
 }
