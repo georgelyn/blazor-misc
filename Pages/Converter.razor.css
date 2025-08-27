@@ -3,6 +3,10 @@
     flex-direction: column;
 }
 
+.class-area textarea {
+    background-color: var(--text-background-color);
+}
+
 .class-area button {
     justify-items: right;
 }
@@ -22,7 +26,8 @@
     min-width: 200px;
     border: 1px solid #88888a;
     border-radius: 0.5em;
-    background-color: #f5f5f5;
+    color: var(--bs-body-color);
+    background-color: var(--text-background-color);
 }
 
 .json-area_btn {
