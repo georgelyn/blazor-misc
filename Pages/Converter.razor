@@ -2,7 +2,6 @@
 
 @using Misc.Utilities
 @using System.Text
-@using System.Text.Json
 @using System.Text.RegularExpressions
 @using System.ComponentModel.DataAnnotations.Schema
 
@@ -13,7 +12,9 @@
         <label for="class-txt" class="form-label">C# Class</label>
         <textarea class="form-control" id="class-txt" rows="10" @bind="classString"></textarea>
     </div>
-    <button type="button" class="btn btn-primary" @onclick="Convert">Convert</button>
+    <div class="class-area-btn">
+        <button type="button" class="btn btn-primary" @onclick="Convert">Convert</button>
+    </div>
 </div>
 
 @if (!string.IsNullOrWhiteSpace(json))
@@ -39,11 +40,6 @@
     private string json = string.Empty;
     private bool isCopied = false;
     private string dataTypePattern = @"public\s+([\w<>\[\],\s?]+)\s+(\w+)";
-    private JsonSerializerOptions serializerOptions = new JsonSerializerOptions
-    {
-        WriteIndented = true,
-        Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
-    };
 
     [Inject]
     private IJSRuntime? JS { get; set; }
@@ -87,11 +83,7 @@
 
     private void FormatJson()
     {
-        try
-        {
-            using var doc = JsonDocument.Parse(json);
-            json = JsonSerializer.Serialize(doc, serializerOptions);
-        }
-        catch { }
+        var (response, _) = Helpers.FormatJson(json);
+        json = response ?? string.Empty;
     }
 }

@@ -10,7 +10,7 @@ build-job:
   artifacts:
         paths:
             - bin/Release/net9.0/publish/wwwroot
-        expire_in: 5 min
+        expire_in: 1 hour
 
 deploy-dev:
   stage: deploy

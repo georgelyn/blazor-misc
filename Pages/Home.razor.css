@@ -1,0 +1,11 @@
+.home-img {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5em;
+}
+
+.home-symbol {
+    font-size: 2em;
+    font-family: monospace; 
+}

@@ -1,0 +1,85 @@
+@page "/formatter"
+@using Misc.Utilities
+@using System.Threading.Tasks
+@using System.Text.RegularExpressions
+
+<PageTitle>Json Formatter</PageTitle>
+
+<div class="txt-area">
+    <div class="mb-3">
+        <label for="txt-area" class="form-label">JSON String</label>
+        <textarea class="form-control" id="txt-area" rows="10" @bind="jsonString"></textarea>
+    </div>
+    <div class="txt-area-btn">
+        <button type="button" class="btn btn-primary" @onclick="FormatJson">Format</button>
+        <button type="button" class="btn btn-primary btn-white-space" data-bs-toggle="tooltip" data-bs-placement="top" title="Format JSON"
+            @onclick="RemoveSpaces">Remove white space</button>
+    </div>
+</div>
+
+@if (!string.IsNullOrWhiteSpace(json))
+{
+    <div class="json-area mb-3">
+        <div class="json-area_btn">
+            <button type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="Copy text"
+                @onclick="CopyText">
+                @(isCopied ? "Text copied" : "Copy")
+            </button>
+        </div>
+        <pre id="copy-text" class="copy-text">@json</pre>
+    </div>
+}
+
+@if (showJsonError)
+{    
+    <div class="message-area mb-3">
+        @notValidMessage
+        @exceptionMessage
+    </div>
+}
+
+@code {
+    private string jsonString = string.Empty;
+    private string json = string.Empty;
+    private bool isCopied;
+    private string notValidMessage = "It's not a valid JSON";
+    private string exceptionMessage = string.Empty;
+    private bool showJsonError = false;
+    private static readonly Regex _regexWhitespace = new Regex(@"\s+");
+
+    [Inject]
+    private IJSRuntime? JS { get; set; }
+
+    private async Task FormatJson()
+    {
+        var (response, exception) = Helpers.FormatJson(jsonString);
+        if (exception != null)
+        {
+            showJsonError = true;
+            exceptionMessage = exception.Message;
+            json = string.Empty;
+
+            await Task.Delay(5000);
+            showJsonError = false;
+            exceptionMessage = string.Empty;
+        } 
+        else
+        {
+            json = response ?? string.Empty;
+        }
+    }
+
+    private async Task RemoveSpaces()
+    {
+        await FormatJson();
+        json = _regexWhitespace.Replace(json, string.Empty);
+    }
+
+    private async Task CopyText()
+    {
+        isCopied = true;
+        await JS!.InvokeVoidAsync("copyToClipboard");
+        await Task.Delay(3000);
+        isCopied = false;
+    }
+}
