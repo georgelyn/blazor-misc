@@ -1,0 +1,16 @@
+<div class="container-response mb-3">
+    @if (ActionContent != null)
+    {
+        <div class="container-response_btn">
+            @ActionContent
+        </div>
+    }
+    @MainContent
+</div>
+
+@code {
+    [Parameter]
+    public RenderFragment? MainContent { get; set; }
+    [Parameter] 
+    public RenderFragment? ActionContent { get; set; }
+}

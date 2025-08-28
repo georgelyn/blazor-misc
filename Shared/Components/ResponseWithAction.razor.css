@@ -1,0 +1,17 @@
+.container-response {
+    display: flex;
+    flex-direction: column;
+    margin-top: 2em;
+    padding: 1em;
+    min-width: 200px;
+    border: 1px solid #88888a;
+    border-radius: 0.5em;
+    color: var(--bs-body-color);
+    background-color: var(--text-background-color);
+}
+
+.container-response_btn {
+    display: flex;  
+    gap: 0.5em; 
+    margin-left: auto;
+}

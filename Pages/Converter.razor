@@ -1,26 +1,30 @@
 @page "/convert"
 
 @using Misc.Utilities
+@using Misc.Shared.Components
 @using System.Text
 @using System.Text.RegularExpressions
 @using System.ComponentModel.DataAnnotations.Schema
 
 <PageTitle>C# Class to Json</PageTitle>
 
-<div class="class-area">
-    <div class="mb-3">
-        <label for="class-txt" class="form-label">C# Class</label>
-        <textarea class="form-control" id="class-txt" rows="10" @bind="classString"></textarea>
-    </div>
-    <div class="class-area-btn">
-        <button type="button" class="btn btn-primary" @onclick="Convert">Convert</button>
-    </div>
+<div class="mb-4">
+    <Info Text="To be used with POCO classes. To correctly identify properties, they must be set as public and include the standard getter ( get; )." />
 </div>
+
+<TextAreaWithAction 
+    Title="C# Class" 
+    @bind-Value="@classString" 
+    FirstBtnText="Convert" 
+    FirstBtnOnClick="Convert" />
 
 @if (!string.IsNullOrWhiteSpace(json))
 {
-    <div class="json-area mb-3">
-        <div class="json-area_btn">
+    <ResponseWithAction>
+        <MainContent>
+            <pre id="copy-text" class="copy-text">@json</pre>    
+        </MainContent>
+        <ActionContent>
             <button type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="Copy text"
                 @onclick="CopyText">
                 @(isCopied ? "Text copied" : "Copy")
@@ -29,9 +33,8 @@
                 @onclick="FormatJson">
                 Format
             </button>
-        </div>
-        <pre id="copy-text" class="copy-text">@json</pre>
-    </div>
+        </ActionContent>
+    </ResponseWithAction>
 }
 
 @code {

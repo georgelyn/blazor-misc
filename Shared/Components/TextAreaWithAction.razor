@@ -1,0 +1,46 @@
+<div class="container-area">
+    <div class="mb-3">
+        <label for="container-txt" class="form-label mb-3">@Title</label>
+        <textarea class="form-control" id="container-txt" rows="10" 
+            value="@Value"
+            @oninput="OnInput"></textarea>
+        @if (OptionalContainerContent != null)
+        {
+            <div class="optional-content mt-3">
+                @OptionalContainerContent
+            </div>
+        }
+    </div>
+    <div class="container-area_btn mt-1">
+        <button type="button" class="btn btn-primary" @onclick="FirstBtnOnClick">@FirstBtnText</button>
+        @if (!string.IsNullOrWhiteSpace(SecondBtnText))
+        {
+            <button type="button" class="btn btn-primary" @onclick="SecondBtnOnClick">@SecondBtnText</button>
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string Title { get; set; } = string.Empty;
+    [Parameter] 
+    public EventCallback<string> ValueChanged { get; set; }
+    [Parameter]
+    public string Value { get; set; } = string.Empty;
+    [Parameter]
+    public string FirstBtnText { get; set; } = string.Empty;
+    [Parameter]
+    public EventCallback FirstBtnOnClick { get; set; }
+    [Parameter]
+    public string? SecondBtnText { get; set; } = string.Empty;
+    [Parameter]
+    public EventCallback SecondBtnOnClick { get; set; }
+    [Parameter]
+    public RenderFragment? OptionalContainerContent { get; set; }
+
+    private async Task OnInput(ChangeEventArgs e)
+    {
+        Value = e.Value?.ToString() ?? string.Empty;
+        await ValueChanged.InvokeAsync(Value);
+    }
+}

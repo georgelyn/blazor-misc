@@ -1,0 +1,8 @@
+.container-info {
+    background-color: #606876ae;
+    white-space: pre-wrap; 
+    word-break: break-word;
+    max-height: 400px;
+    padding: .75rem .75rem;
+    border-radius: 0.5em;
+}

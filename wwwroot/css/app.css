@@ -1,10 +1,11 @@
 :root {
-    --text-background-color: #d3d3d495;
+    --text-background-color: #e2e2e2b6;
     /* --primary-color: #454b55; */
     --primary-color: #282c34;
     --dark-purple-color: #251426;
     --purple-primary-color: #3b0847;
     --purple-secondary-color: #512e56;
+    --purple-light-color: #846b8897;
 }
 
 html, body {
@@ -19,6 +20,10 @@ h1:focus {
 
 a, .btn-link {
     color: #0071c1;
+}
+
+input {
+    background-color: var(--text-background-color) !important;
 }
 
 .btn-primary {
@@ -48,6 +53,9 @@ a, .btn-link {
 
 .content {
     padding-top: 1.1rem;
+    max-width: 1190px;
+    /* max-width: 1312px; */
+    margin: 0 auto;
 }
 
 .valid.modified:not([type=checkbox]) {

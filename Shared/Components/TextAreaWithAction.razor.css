@@ -1,0 +1,19 @@
+.container-area {
+    display: flex;
+    flex-direction: column;
+}
+
+.container-area textarea {
+    background-color: var(--text-background-color);
+}
+
+.container-area button {
+    min-width: 100px;
+}
+
+.container-area_btn {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5em;
+    margin-left: auto;
+}

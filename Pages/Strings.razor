@@ -1,0 +1,50 @@
+@page "/strings"
+@using Misc.Shared.Components
+
+<PageTitle>Strings Utilities</PageTitle>
+
+<TextAreaWithAction 
+    Title="Split/Join String" 
+    @bind-Value="value" 
+    FirstBtnText="Split" 
+    FirstBtnOnClick="Split"
+    SecondBtnText="Join" 
+    SecondBtnOnClick="Join">
+
+    <OptionalContainerContent>
+       <div class="d-flex flex-row gap-3">
+            <div class="col-sm-4"></div>
+            <label for="split-choice-txt" class="col-form-label">Delimiter</label>
+            <input type="text" class="form-control" id="split-choice-txt" placeholder="Comma (,) by default" @bind="delimiter">
+        </div>
+    </OptionalContainerContent>
+
+</TextAreaWithAction>
+
+@code {
+    private string value = string.Empty;
+    private string delimiter = string.Empty;
+    
+    private void Split()
+    {
+        if (!string.IsNullOrWhiteSpace(value))
+        {
+            if (string.IsNullOrWhiteSpace(delimiter))
+                delimiter = ",";
+
+            value = string.Join(Environment.NewLine, value.Split(delimiter));
+        }
+    }
+    
+    private void Join()
+    {
+        if (!string.IsNullOrWhiteSpace(value))
+        {
+            if (string.IsNullOrWhiteSpace(delimiter))
+                delimiter = ",";
+
+            string[] lines = value.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+            value = string.Join(delimiter, lines);
+        }
+    }
+}

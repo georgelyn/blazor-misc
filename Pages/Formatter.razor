@@ -1,33 +1,32 @@
 @page "/formatter"
 @using Misc.Utilities
+@using Misc.Shared.Components
 @using System.Threading.Tasks
 @using System.Text.RegularExpressions
 
 <PageTitle>Json Formatter</PageTitle>
 
-<div class="txt-area">
-    <div class="mb-3">
-        <label for="txt-area" class="form-label">JSON String</label>
-        <textarea class="form-control" id="txt-area" rows="10" @bind="jsonString"></textarea>
-    </div>
-    <div class="txt-area-btn">
-        <button type="button" class="btn btn-primary" @onclick="FormatJson">Format</button>
-        <button type="button" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Format JSON"
-            @onclick="RemoveSpaces">Remove white space</button>
-    </div>
-</div>
+<TextAreaWithAction 
+    Title="JSON String" 
+    @bind-Value="@jsonString" 
+    FirstBtnText="Format" 
+    FirstBtnOnClick="FormatJson"
+    SecondBtnText="Remove white space" 
+    SecondBtnOnClick="RemoveSpaces" />
 
 @if (!string.IsNullOrWhiteSpace(json))
 {
-    <div class="json-area mb-3">
-        <div class="json-area_btn">
+    <ResponseWithAction>
+        <MainContent>
+            <pre id="copy-text" class="copy-text">@json</pre>    
+        </MainContent>
+        <ActionContent>
             <button type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="Copy text"
                 @onclick="CopyText">
                 @(isCopied ? "Text copied" : "Copy")
             </button>
-        </div>
-        <pre id="copy-text" class="copy-text">@json</pre>
-    </div>
+        </ActionContent>
+    </ResponseWithAction>
 }
 
 @if (showJsonError)
