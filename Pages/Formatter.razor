@@ -1,4 +1,6 @@
 @page "/formatter"
+
+@using Misc.Shared.Models
 @using Misc.Utilities
 @using Misc.Shared.Components
 @using System.Threading.Tasks
@@ -9,10 +11,7 @@
 <TextAreaWithAction 
     Title="JSON String" 
     @bind-Value="@jsonString" 
-    FirstBtnText="Format" 
-    FirstBtnOnClick="FormatJson"
-    SecondBtnText="Remove white space" 
-    SecondBtnOnClick="RemoveSpaces" />
+    Buttons="buttons" />
 
 @if (!string.IsNullOrWhiteSpace(json))
 {
@@ -38,6 +37,8 @@
 }
 
 @code {
+    [Inject]
+    private IJSRuntime? JS { get; set; }
     private string jsonString = string.Empty;
     private string json = string.Empty;
     private bool isCopied;
@@ -45,9 +46,16 @@
     private string exceptionMessage = string.Empty;
     private bool showJsonError = false;
     private static readonly Regex _regexWhitespace = new Regex(@"\s+");
+    private readonly IEnumerable<Button> buttons;
 
-    [Inject]
-    private IJSRuntime? JS { get; set; }
+    public Formatter(IEnumerable<Button> buttons)
+    {
+        this.buttons = new List<Button>() 
+        {
+            new Button(1, "Format", EventCallback.Factory.Create(this, FormatJson)), 
+            new Button(2, "Remove white space", EventCallback.Factory.Create(this, RemoveSpaces)), 
+        };
+    }
 
     private async Task FormatJson()
     {

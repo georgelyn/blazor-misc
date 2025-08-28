@@ -1,3 +1,6 @@
+@using Misc.Shared.Models
+@using System.ComponentModel.DataAnnotations.Schema
+
 <div class="container-area">
     <div class="mb-3">
         <label for="container-txt" class="form-label mb-3">@Title</label>
@@ -12,10 +15,9 @@
         }
     </div>
     <div class="container-area_btn mt-1">
-        <button type="button" class="btn btn-primary" @onclick="FirstBtnOnClick">@FirstBtnText</button>
-        @if (!string.IsNullOrWhiteSpace(SecondBtnText))
+        @foreach (var button in Buttons.OrderBy(b => b.Order))
         {
-            <button type="button" class="btn btn-primary" @onclick="SecondBtnOnClick">@SecondBtnText</button>
+            <button type="button" class="btn btn-primary" @onclick="button.Event">@button.Text</button>
         }
     </div>
 </div>
@@ -28,13 +30,7 @@
     [Parameter]
     public string Value { get; set; } = string.Empty;
     [Parameter]
-    public string FirstBtnText { get; set; } = string.Empty;
-    [Parameter]
-    public EventCallback FirstBtnOnClick { get; set; }
-    [Parameter]
-    public string? SecondBtnText { get; set; } = string.Empty;
-    [Parameter]
-    public EventCallback SecondBtnOnClick { get; set; }
+    public IEnumerable<Button> Buttons { get; set; } = Array.Empty<Button>();
     [Parameter]
     public RenderFragment? OptionalContainerContent { get; set; }
 

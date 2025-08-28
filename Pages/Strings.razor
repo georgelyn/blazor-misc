@@ -1,15 +1,14 @@
 @page "/strings"
+
 @using Misc.Shared.Components
+@using Misc.Shared.Models
 
 <PageTitle>Strings Utilities</PageTitle>
 
 <TextAreaWithAction 
     Title="Split/Join String" 
     @bind-Value="value" 
-    FirstBtnText="Split" 
-    FirstBtnOnClick="Split"
-    SecondBtnText="Join" 
-    SecondBtnOnClick="Join">
+    Buttons="buttons">
 
     <OptionalContainerContent>
        <div class="d-flex flex-row gap-3">
@@ -24,6 +23,16 @@
 @code {
     private string value = string.Empty;
     private string delimiter = string.Empty;
+    private readonly IEnumerable<Button> buttons;
+
+    public Strings(IEnumerable<Button> buttons)
+    {
+        this.buttons = new List<Button>() 
+        {
+            new Button(1, "Split", EventCallback.Factory.Create(this, Split)), 
+            new Button(2, "Join", EventCallback.Factory.Create(this, Join)), 
+        };
+    }
     
     private void Split()
     {
