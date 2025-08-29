@@ -5,55 +5,93 @@
 
 <PageTitle>Strings Utilities</PageTitle>
 
-<TextAreaWithAction 
-    Title="Split/Join String" 
-    @bind-Value="value" 
-    Buttons="buttons">
+<div class="d-flex flex-column gap-5">
+    <TextAreaWithAction 
+        Title="Split/Join String" 
+        @bind-Value="splitJoinValue" 
+        Buttons="splitJoinButtons">
 
-    <OptionalContainerContent>
-       <div class="d-flex flex-row gap-3">
-            <div class="col-sm-4"></div>
-            <label for="split-choice-txt" class="col-form-label">Delimiter</label>
-            <input type="text" class="form-control" id="split-choice-txt" placeholder="Comma (,) by default" @bind="delimiter">
-        </div>
-    </OptionalContainerContent>
+        <OptionalContainerContent>
+            <div class="d-flex flex-column gap-3">
+                <div class="d-flex justify-content-end container-input-label">
+                    <label for="split-choice-txt" class="col-sm-2 col-form-label max-w-100px">Delimiter</label>
+                    <input type="text" class="form-control max-w-300px" id="split-choice-txt" placeholder="Comma (,) by default" @bind="delimiter">
+                </div>
+            </div>
+        </OptionalContainerContent>
+    </TextAreaWithAction>
 
-</TextAreaWithAction>
+    <TextAreaWithAction 
+        Title="Replace String" 
+        @bind-Value="replaceValue" 
+        Buttons="replaceButtons">
+
+        <OptionalContainerContent>
+            <div class="d-flex flex-column gap-3">
+                <div class="d-flex justify-content-end container-input-label">
+                    <label for="replace-from-txt" class="col-sm-2 col-form-label max-w-100px">Replace</label>
+                    <input type="text" class="form-control max-w-300px" id="replace-from-txt" @bind="replaceFrom">
+                </div>
+                <div class="d-flex justify-content-end container-input-label">
+                    <label for="replace-with-txt" class="col-sm-2 col-form-label max-w-100px">With</label>
+                    <input type="text" class="form-control max-w-300px" id="replace-with-txt" @bind="replaceWith">                
+                </div>
+            </div>
+        </OptionalContainerContent>
+    </TextAreaWithAction>
+</div>
 
 @code {
-    private string value = string.Empty;
+    private string splitJoinValue = string.Empty;
+    private string replaceValue = string.Empty;
     private string delimiter = string.Empty;
-    private readonly IEnumerable<Button> buttons;
+    private string replaceFrom = string.Empty;
+    private string replaceWith = string.Empty;
+    private readonly IEnumerable<Button> splitJoinButtons;
+    private readonly IEnumerable<Button> replaceButtons;
 
     public Strings(IEnumerable<Button> buttons)
     {
-        this.buttons = new List<Button>() 
+        this.splitJoinButtons = new List<Button>() 
         {
             new Button(1, "Split", EventCallback.Factory.Create(this, Split)), 
             new Button(2, "Join", EventCallback.Factory.Create(this, Join)), 
         };
+
+        this.replaceButtons = new List<Button>() 
+        {
+            new Button(1, "Replace", EventCallback.Factory.Create(this, Replace)), 
+        };
     }
-    
+
     private void Split()
     {
-        if (!string.IsNullOrWhiteSpace(value))
+        if (!string.IsNullOrWhiteSpace(splitJoinValue))
         {
             if (string.IsNullOrWhiteSpace(delimiter))
                 delimiter = ",";
 
-            value = string.Join(Environment.NewLine, value.Split(delimiter));
+            splitJoinValue = string.Join(Environment.NewLine, splitJoinValue.Split(delimiter));
         }
     }
-    
+
     private void Join()
     {
-        if (!string.IsNullOrWhiteSpace(value))
+        if (!string.IsNullOrWhiteSpace(splitJoinValue))
         {
             if (string.IsNullOrWhiteSpace(delimiter))
                 delimiter = ",";
 
-            string[] lines = value.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
-            value = string.Join(delimiter, lines);
+            string[] lines = splitJoinValue.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+            splitJoinValue = string.Join(delimiter, lines);
+        }
+    }
+
+    private void Replace()
+    {
+        if (!string.IsNullOrWhiteSpace(replaceValue))
+        {
+            replaceValue = replaceValue.Replace(replaceFrom, replaceWith);
         }
     }
 }

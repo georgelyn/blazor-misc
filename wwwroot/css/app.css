@@ -3,7 +3,8 @@
     /* --primary-color: #454b55; */
     --primary-color: #282c34;
     --dark-purple-color: #251426;
-    --purple-primary-color: #3b0847;
+    /* --purple-primary-color: #3b0847; */
+    --purple-primary-color: #551763ab;
     --purple-secondary-color: #512e56;
     --purple-light-color: #846b8897;
 }
@@ -145,4 +146,23 @@ code {
 
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
     text-align: start;
+}
+
+.max-w-300px {
+    max-width: 300px !important;
+}
+
+.max-w-100px {
+    max-width: 100px !important;
+}
+
+@media (max-width: 640.98px) {
+    .container-input-label {
+        flex-direction: column;
+        width: 100%;
+    }  
+
+    .container-input-label input {
+        max-width: 100% !important;
+    }
 }

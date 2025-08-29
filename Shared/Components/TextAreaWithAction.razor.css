@@ -17,3 +17,11 @@
     gap: 0.5em;
     margin-left: auto;
 }
+
+@media (max-width: 640.98px) {
+    .container-area_btn {
+        flex-direction: column;
+        width: 100%;
+        margin-top: 1rem !important;
+    }  
+}
