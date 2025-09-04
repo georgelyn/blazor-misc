@@ -1,0 +1,10 @@
+services:
+  misc:
+    image: misc:dev
+    container_name: misc-blazor
+    build:
+      dockerfile: Dockerfile
+    ports:
+      - 5097:80
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
