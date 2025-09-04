@@ -1,17 +1,15 @@
 :root {
     --text-background-color: #e2e2e2b6;
-    /* --primary-color: #454b55; */
-    --primary-color: #282c34;
-    --dark-purple-color: #251426;
-    /* --purple-primary-color: #3b0847; */
+    --background-color: #363c43;
+    --dark-purple-color: #381e38;
     --purple-primary-color: #551763ab;
-    --purple-secondary-color: #512e56;
+    --purple-secondary-color: #402544;
     --purple-light-color: #846b8897;
 }
 
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    background-color: var(--primary-color);
+    background-color: var(--background-color);
     color: #e4e7ef;
 }
 
@@ -33,7 +31,7 @@ input {
     border-color: var(--dark-purple-color);
 }
 
-.btn-primary:hover, .btn-primary:active {
+.btn-primary:hover, .btn-primary:active, .btn-primary:focus-visible {
     background-color: var(--purple-secondary-color) !important;
     border-color: var(--purple-secondary-color) !important;
 }

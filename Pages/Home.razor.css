@@ -9,3 +9,7 @@
     font-size: 2em;
     font-family: monospace; 
 }
+
+.img {
+    max-width: 100%;
+}
