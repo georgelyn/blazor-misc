@@ -1,0 +1,15 @@
+input {
+    min-height: 3rem;
+}
+
+@media (max-width: 640.98px) {
+    .search-container {
+        flex-direction: column !important;
+        width: 100% !important;
+        margin-top: 1rem !important;
+    }  
+
+    .search-container button {
+        width: 100%;
+    }  
+}

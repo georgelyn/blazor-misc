@@ -1,0 +1,119 @@
+@page "/images"
+
+@using Misc.Services
+@using System.Threading.Tasks
+@using Misc.Shared.Components
+@using Misc.Shared.Models
+@using System.Reflection.Metadata
+@inject IImagesService ImagesService
+@inject IJSRuntime JS
+
+<PageTitle>Image Search</PageTitle>
+
+<div class="container">
+    <ImageSearch
+        Title="Search for images"
+        @bind-Value="keyword"
+        Button="button"
+        Placeholder="orange cat"
+    />
+
+    @if (showMessage)
+    {    
+        <div class="message-area mb-3">
+            @message
+        </div>
+    }
+
+    @if (isLoading)
+    {
+        <div class="d-flex justify-content-center align-items-center my-5">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    }
+    else if (images != null && images.Any())
+    {
+        <Gallery 
+            Images="images" 
+            CurrentPage="currentPage" 
+            TotalPages="totalPages"
+            OnPageChanged="page => Search(page)"
+        />
+    }
+</div>
+
+@code {
+    private string? keyword;
+    private IEnumerable<ImageObject> images = Array.Empty<ImageObject>();
+    private Button button;
+    private bool showMessage = false;
+    private string? message;
+    private int currentPage = 1;
+    private int pageSize = 16;
+    private int totalPages = 0;
+    private string browserLanguage = "en";
+    private bool isLoading;
+
+    public Images()
+    {
+        this.button = new Button(1, "Search on Pixabay", EventCallback.Factory.Create(this, () => Search(1))); 
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var lang = await JS.InvokeAsync<string>("eval", "navigator.language");
+        if (string.IsNullOrWhiteSpace(lang) || lang.Split("-").Length == 0)
+            browserLanguage = "en";
+        else
+            browserLanguage = lang.Split("-")[0];
+    }
+
+    private async Task Search(int page)
+    {
+        currentPage = page;
+
+        if (string.IsNullOrWhiteSpace(keyword))
+            keyword = "orange cat";
+
+        try
+        {
+             isLoading = true;
+            StateHasChanged();
+
+            var response = await ImagesService.GetImagesByKeywordAsync(keyword, currentPage, pageSize, browserLanguage!);
+            if (response == null || response?.TotalHits == 0)
+            {
+                await DisplayMessage("No images found");
+            }
+            else
+            {
+                totalPages = (int)Math.Ceiling((double)response!.TotalHits / pageSize);
+                images = response.Hits!;
+            }
+        }
+        catch 
+        {
+            await DisplayMessage("An error has occurred");
+        }
+        finally
+        {
+            isLoading = false;
+            StateHasChanged();
+        }
+    }
+
+    private async Task DisplayMessage(string message)
+    {
+        this.message = message;
+        showMessage = true;
+        StateHasChanged();
+
+        // TODO: messages service
+        await Task.Delay(3000);
+
+        showMessage = false;
+        StateHasChanged();
+    }
+}

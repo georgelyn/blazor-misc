@@ -4,7 +4,9 @@
 <div class="container-area">
     <div class="mb-3">
         <label for="container-txt" class="form-label mb-3">@Title</label>
-        <textarea class="form-control" id="container-txt" rows="10" 
+        <textarea class="form-control" id="container-txt" 
+            placeholder="@Placeholder"
+            rows="@Rows" 
             value="@Value"
             @oninput="OnInput"></textarea>
         @if (OptionalContainerContent != null)
@@ -33,6 +35,10 @@
     public IEnumerable<Button> Buttons { get; set; } = Array.Empty<Button>();
     [Parameter]
     public RenderFragment? OptionalContainerContent { get; set; }
+    [Parameter]
+    public int Rows { get; set; } = 10;
+    [Parameter]
+    public string Placeholder { get; set; } = string.Empty;
 
     private async Task OnInput(ChangeEventArgs e)
     {

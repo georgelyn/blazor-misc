@@ -31,9 +31,15 @@ input {
     border-color: var(--dark-purple-color);
 }
 
-.btn-primary:hover, .btn-primary:active, .btn-primary:focus-visible {
+.btn-primary:hover, .btn-primary:active, .btn-primary:focus-visible,
+ .btn-outline-primary:hover, btn-outline-primary:active, btn-outline-primary:focus-visible {
     background-color: var(--purple-secondary-color) !important;
     border-color: var(--purple-secondary-color) !important;
+}
+
+.btn-outline-primary, .btn-outline-primary:disabled {
+    color: #b0b2b4;
+    border-color: #b07cad;
 }
 
 .btn-secondary {
@@ -50,9 +56,9 @@ input {
   box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem var(--purple-secondary-color);
 }
 
-.content {
+.mcontainer {
     padding-top: 1.1rem;
-    max-width: 1190px;
+    max-width: 120rem;
     /* max-width: 1312px; */
     margin: 0 auto;
 }
@@ -152,6 +158,35 @@ code {
 
 .max-w-100px {
     max-width: 100px !important;
+}
+
+.max-w-85 {
+    max-width: 85% !important;
+}
+
+.margin-auto {
+    margin: 0 auto;
+}
+
+.app-btn {
+    min-width: 100px !important;
+}
+
+.message-area {
+    margin-top: 2em;
+    white-space: pre-wrap; 
+    word-break: break-word;
+    max-height: 400px;
+    overflow-y: auto; 
+    padding: .375rem .75rem;
+    border-radius: 0.5em;
+    border: 1px solid #88888a;
+    color: var(--bs-body-color);
+    background-color: var(--text-background-color);
+}
+
+.text-primary {
+    color: var(--purple-light-color) !important;
 }
 
 @media (max-width: 640.98px) {

@@ -1,0 +1,34 @@
+@using Misc.Shared.Models
+
+<div class="d-flex flex-column gap-3 w-75 margin-auto search-container">
+    <div class="d-flex flex-column gap-2 mw-100">
+        <label for="keyword-text">@Title</label>
+        <input type="text" class="form-control" id="keyword-text" placeholder="@Placeholder" @bind="@Value" @oninput="OnInput">
+    </div>
+
+     @if (Button != null)
+     {
+        <div class="d-flex flex-row-reverse">
+            <button type="button" class="btn btn-primary app-btn" @onclick="Button.Event">@Button.Text</button>
+        </div>
+     }
+</div>
+
+@code {
+    [Parameter]
+    public string Title { get; set; } = string.Empty;
+    [Parameter] 
+    public EventCallback<string> ValueChanged { get; set; }
+    [Parameter]
+    public string Value { get; set; } = string.Empty;
+    [Parameter]
+    public string Placeholder { get; set; } = string.Empty;
+    [Parameter]
+    public Button? Button { get; set; } = null; 
+
+    private async Task OnInput(ChangeEventArgs e)
+    {
+        Value = e.Value?.ToString() ?? string.Empty;
+        await ValueChanged.InvokeAsync(Value);
+    }
+}

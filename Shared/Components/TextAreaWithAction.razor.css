@@ -5,6 +5,7 @@
 
 .container-area textarea {
     background-color: var(--text-background-color);
+    min-height: 20rem;
 }
 
 .container-area button {

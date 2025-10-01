@@ -8,33 +8,36 @@
 
 <PageTitle>Json Formatter</PageTitle>
 
-<TextAreaWithAction 
-    Title="JSON String" 
-    @bind-Value="@jsonString" 
-    Buttons="buttons" />
+<div class="container">
 
-@if (!string.IsNullOrWhiteSpace(json))
-{
-    <ResponseWithAction>
-        <MainContent>
-            <pre id="copy-text" class="copy-text">@json</pre>    
-        </MainContent>
-        <ActionContent>
-            <button type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="Copy text"
-                @onclick="CopyText">
-                @(isCopied ? "Text copied" : "Copy")
-            </button>
-        </ActionContent>
-    </ResponseWithAction>
-}
+    <TextAreaWithAction 
+        Title="JSON String" 
+        @bind-Value="@jsonString" 
+        Buttons="buttons" />
 
-@if (showJsonError)
-{    
-    <div class="message-area mb-3">
-        @notValidMessage
-        @exceptionMessage
-    </div>
-}
+    @if (!string.IsNullOrWhiteSpace(json))
+    {
+        <ResponseWithAction>
+            <MainContent>
+                <pre id="copy-text" class="copy-text">@json</pre>    
+            </MainContent>
+            <ActionContent>
+                <button type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="Copy text"
+                    @onclick="CopyText">
+                    @(isCopied ? "Text copied" : "Copy")
+                </button>
+            </ActionContent>
+        </ResponseWithAction>
+    }
+
+    @if (showJsonError)
+    {    
+        <div class="message-area mb-3">
+            @notValidMessage
+            @exceptionMessage
+        </div>
+    }
+</div>
 
 @code {
     [Inject]

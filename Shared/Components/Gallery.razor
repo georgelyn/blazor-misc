@@ -1,0 +1,75 @@
+@using Misc.Shared.Models
+@using System.ComponentModel.DataAnnotations.Schema
+
+<div class="mt-5">
+    <div class="row row-cols-1 row-cols-sm-3 row-cols-md-4">
+        @foreach (var image in Images)
+        {
+            <div class="col pb-3 img-container">
+                <a href="@image.LargeImageUrl" target="_blank">
+                    <img src="@image.WebformatUrl" class="img-fluid object-fit-cover" />
+                </a>
+            </div>
+        }
+    </div>
+
+    <div class="d-flex justify-content-center align-items-center gap-2 mt-4 pagination-container">
+        <button class="btn btn-outline-primary"
+                disabled="@(CurrentPage == 1)"
+                @onclick="() => ChangePage(CurrentPage - 1)">
+            « Prev
+        </button>
+
+        <div class="input-group pagination-input-container">
+            <span class="input-group-text">Page</span>
+            <input type="text"
+                class="form-control text-center"
+                min="1"
+                max="@TotalPages"
+                @bind="inputPage"
+                @bind:event="oninput"
+                @onkeydown="OnEnter" />
+            <span class="input-group-text">/ @TotalPages</span>
+        </div>
+
+        <button class="btn btn-outline-primary"
+                disabled="@(CurrentPage == TotalPages)"
+                @onclick="() => ChangePage(CurrentPage + 1)">
+            Next »
+        </button>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public IEnumerable<ImageObject> Images { get; set; } = Array.Empty<ImageObject>();
+    [Parameter]
+    public int CurrentPage { get; set; }
+    [Parameter] 
+    public int TotalPages { get; set; }
+    [Parameter] 
+    public EventCallback<int> OnPageChanged { get; set; }
+
+    private int inputPage { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        inputPage = CurrentPage;
+    }
+
+    private async Task ChangePage(int page)
+    {
+        if (page >= 1 && page <= TotalPages && OnPageChanged.HasDelegate)
+        {
+            await OnPageChanged.InvokeAsync(page);
+        }
+    }
+
+    private async Task OnEnter(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+        {
+            await ChangePage(inputPage);
+        }
+    }
+}

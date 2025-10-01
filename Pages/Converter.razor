@@ -9,33 +9,35 @@
 
 <PageTitle>C# Class to Json</PageTitle>
 
-<div class="mb-4">
-    <Info Text="To be used with POCO classes. To correctly identify properties, they must be set as public and include the standard getter ( get; )." />
+<div class ="container">
+    <div class="mb-4">
+        <Info Text="To be used with POCO classes. To correctly identify properties, they must be set as public and include the standard getter ( get; )." />
+    </div>
+
+    <TextAreaWithAction 
+        Title="C# Class" 
+        @bind-Value="@classString" 
+        Buttons="buttons" />
+
+    @if (!string.IsNullOrWhiteSpace(json))
+    {
+        <ResponseWithAction>
+            <MainContent>
+                <pre id="copy-text" class="copy-text">@json</pre>    
+            </MainContent>
+            <ActionContent>
+                <button type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="Copy text"
+                    @onclick="CopyText">
+                    @(isCopied ? "Text copied" : "Copy")
+                </button>
+                <button type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="Format JSON"
+                    @onclick="FormatJson">
+                    Format
+                </button>
+            </ActionContent>
+        </ResponseWithAction>
+    }
 </div>
-
-<TextAreaWithAction 
-    Title="C# Class" 
-    @bind-Value="@classString" 
-    Buttons="buttons" />
-
-@if (!string.IsNullOrWhiteSpace(json))
-{
-    <ResponseWithAction>
-        <MainContent>
-            <pre id="copy-text" class="copy-text">@json</pre>    
-        </MainContent>
-        <ActionContent>
-            <button type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="Copy text"
-                @onclick="CopyText">
-                @(isCopied ? "Text copied" : "Copy")
-            </button>
-            <button type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="Format JSON"
-                @onclick="FormatJson">
-                Format
-            </button>
-        </ActionContent>
-    </ResponseWithAction>
-}
 
 @code {
     [Inject]
