@@ -3,7 +3,7 @@
 <div class="d-flex flex-column gap-3 w-75 margin-auto search-container">
     <div class="d-flex flex-column gap-2 mw-100">
         <label for="keyword-text">@Title</label>
-        <input type="text" class="form-control" id="keyword-text" placeholder="@Placeholder" @bind="@Value" @oninput="OnInput">
+        <input type="text" class="form-control" id="keyword-text" placeholder="@Placeholder" @bind="@Value" @oninput="OnInput" @onkeydown="OnEnter">
     </div>
 
      @if (Button != null)
@@ -30,5 +30,13 @@
     {
         Value = e.Value?.ToString() ?? string.Empty;
         await ValueChanged.InvokeAsync(Value);
+    }
+
+    private async Task OnEnter(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter" && Button != null)
+        {
+            await Button.Event.InvokeAsync(null);
+        }
     }
 }

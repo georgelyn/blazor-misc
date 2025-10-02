@@ -173,7 +173,7 @@ code {
 }
 
 .message-area {
-    margin-top: 2em;
+    margin-top: 1em;
     white-space: pre-wrap; 
     word-break: break-word;
     max-height: 400px;
@@ -189,10 +189,15 @@ code {
     color: var(--purple-light-color) !important;
 }
 
+.container-input-label {
+    gap: 15px;
+}
+
 @media (max-width: 640.98px) {
     .container-input-label {
         flex-direction: column;
         width: 100%;
+        gap: unset;
     }  
 
     .container-input-label input {

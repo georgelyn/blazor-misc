@@ -1,17 +1,22 @@
 @page "/formatter"
 
+@using Misc.Services
 @using Misc.Shared.Models
 @using Misc.Utilities
 @using Misc.Shared.Components
 @using System.Threading.Tasks
 @using System.Text.RegularExpressions
+@using Microsoft.Extensions.Localization
+@using Misc.Resources
+@inject IMessagesService MessagesService
+@inject IStringLocalizer<Resources> L
 
-<PageTitle>Json Formatter</PageTitle>
+<PageTitle>@L["PageFormatter"]</PageTitle>
 
 <div class="container">
 
     <TextAreaWithAction 
-        Title="JSON String" 
+        Title="@L["FormatterTextTitle"]" 
         @bind-Value="@jsonString" 
         Buttons="buttons" />
 
@@ -22,20 +27,12 @@
                 <pre id="copy-text" class="copy-text">@json</pre>    
             </MainContent>
             <ActionContent>
-                <button type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="Copy text"
+                <button type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="@L["ConverterCopyText"]"
                     @onclick="CopyText">
-                    @(isCopied ? "Text copied" : "Copy")
+                    @(isCopied ? @L["ConverterCopyDoneBtn"] : @L["Copy"])
                 </button>
             </ActionContent>
         </ResponseWithAction>
-    }
-
-    @if (showJsonError)
-    {    
-        <div class="message-area mb-3">
-            @notValidMessage
-            @exceptionMessage
-        </div>
     }
 </div>
 
@@ -45,19 +42,19 @@
     private string jsonString = string.Empty;
     private string json = string.Empty;
     private bool isCopied;
-    private string notValidMessage = "It's not a valid JSON";
-    private string exceptionMessage = string.Empty;
-    private bool showJsonError = false;
+    private string notValidMessage = string.Empty;
     private static readonly Regex _regexWhitespace = new Regex(@"\s+");
-    private readonly IEnumerable<Button> buttons;
+    private List<Button> buttons = new();
 
-    public Formatter(IEnumerable<Button> buttons)
+    protected override void OnInitialized()
     {
-        this.buttons = new List<Button>() 
+        buttons = new()
         {
-            new Button(1, "Format", EventCallback.Factory.Create(this, FormatJson)), 
-            new Button(2, "Remove white space", EventCallback.Factory.Create(this, RemoveSpaces)), 
+            new Button(1, @L["Format"], EventCallback.Factory.Create(this, FormatJson)), 
+            new Button(2, @L["RemoveWhiteSpace"], EventCallback.Factory.Create(this, RemoveSpaces)), 
         };
+
+        notValidMessage = @L["JsonNotValid"];
     }
 
     private async Task FormatJson()
@@ -65,13 +62,7 @@
         var (response, exception) = Helpers.FormatJson(jsonString);
         if (exception != null)
         {
-            showJsonError = true;
-            exceptionMessage = exception.Message;
-            json = string.Empty;
-
-            await Task.Delay(5000);
-            showJsonError = false;
-            exceptionMessage = string.Empty;
+            await MessagesService.DisplayMessageAsync($"{notValidMessage}{Environment.NewLine}{exception.Message}");
         } 
         else
         {

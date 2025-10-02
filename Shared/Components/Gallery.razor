@@ -1,5 +1,8 @@
 @using Misc.Shared.Models
 @using System.ComponentModel.DataAnnotations.Schema
+@using Microsoft.Extensions.Localization
+@using Misc.Resources
+@inject IStringLocalizer<Resources> L
 
 <div class="mt-5">
     <div class="row row-cols-1 row-cols-sm-3 row-cols-md-4">
@@ -17,11 +20,11 @@
         <button class="btn btn-outline-primary"
                 disabled="@(CurrentPage == 1)"
                 @onclick="() => ChangePage(CurrentPage - 1)">
-            « Prev
+            « @L["Prev"]
         </button>
 
         <div class="input-group pagination-input-container">
-            <span class="input-group-text">Page</span>
+            <span class="input-group-text">@L["Page"]</span>
             <input type="text"
                 class="form-control text-center"
                 min="1"
@@ -35,7 +38,7 @@
         <button class="btn btn-outline-primary"
                 disabled="@(CurrentPage == TotalPages)"
                 @onclick="() => ChangePage(CurrentPage + 1)">
-            Next »
+            @L["Next"] »
         </button>
     </div>
 </div>

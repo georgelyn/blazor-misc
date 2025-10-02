@@ -5,60 +5,46 @@
 @using Misc.Shared.Components
 @using Misc.Shared.Models
 @using System.Reflection.Metadata
+@using Microsoft.Extensions.Localization
+@using Misc.Resources
+@inject IStringLocalizer<Resources> L
 @inject IImagesService ImagesService
+@inject IMessagesService MessagesService
 @inject IJSRuntime JS
 
-<PageTitle>Image Search</PageTitle>
+<PageTitle>@L["PageImageSearch"]</PageTitle>
 
 <div class="container">
-    <ImageSearch
-        Title="Search for images"
-        @bind-Value="keyword"
-        Button="button"
-        Placeholder="orange cat"
-    />
-
-    @if (showMessage)
-    {    
-        <div class="message-area mb-3">
-            @message
-        </div>
-    }
+    <ImageSearch Title="@L["ImageSearchTextTitle"]" @bind-Value="keyword" Button="button" Placeholder="@placeholder" />
 
     @if (isLoading)
     {
         <div class="d-flex justify-content-center align-items-center my-5">
             <div class="spinner-border text-primary" role="status">
-                <span class="visually-hidden">Loading...</span>
+                <span class="visually-hidden">@L["Loading"]...</span>
             </div>
         </div>
     }
     else if (images != null && images.Any())
     {
-        <Gallery 
-            Images="images" 
-            CurrentPage="currentPage" 
-            TotalPages="totalPages"
-            OnPageChanged="page => Search(page)"
-        />
+        <Gallery Images="images" CurrentPage="currentPage" TotalPages="totalPages" OnPageChanged="page => Search(page)" />
     }
 </div>
 
 @code {
     private string? keyword;
     private IEnumerable<ImageObject> images = Array.Empty<ImageObject>();
-    private Button button;
-    private bool showMessage = false;
-    private string? message;
+    private Button? button;
     private int currentPage = 1;
     private int pageSize = 16;
     private int totalPages = 0;
     private string browserLanguage = "en";
     private bool isLoading;
+    private string? placeholder = null;
 
-    public Images()
+    protected override void OnInitialized()
     {
-        this.button = new Button(1, "Search on Pixabay", EventCallback.Factory.Create(this, () => Search(1))); 
+        this.button = new Button(1, @L["SearchOnWeb"], EventCallback.Factory.Create(this, () => Search(1)));
     }
 
     protected override async Task OnInitializedAsync()
@@ -68,24 +54,24 @@
             browserLanguage = "en";
         else
             browserLanguage = lang.Split("-")[0];
+
+        placeholder = GetPlaceholder();
     }
 
     private async Task Search(int page)
     {
         currentPage = page;
-
         if (string.IsNullOrWhiteSpace(keyword))
-            keyword = "orange cat";
+            keyword = placeholder;
 
         try
         {
-             isLoading = true;
-            StateHasChanged();
-
-            var response = await ImagesService.GetImagesByKeywordAsync(keyword, currentPage, pageSize, browserLanguage!);
+            isLoading = true;
+            var response = await ImagesService.GetImagesByKeywordAsync(keyword!, currentPage, pageSize, browserLanguage!);
             if (response == null || response?.TotalHits == 0)
             {
-                await DisplayMessage("No images found");
+                Reset();
+                await MessagesService.DisplayMessageAsync(@L["ImagesNotFound"]);
             }
             else
             {
@@ -93,27 +79,34 @@
                 images = response.Hits!;
             }
         }
-        catch 
+        catch
         {
-            await DisplayMessage("An error has occurred");
+            Reset();
+            await MessagesService.DisplayMessageAsync(@L["AnErrorHasOccurred"]);
         }
         finally
         {
             isLoading = false;
-            StateHasChanged();
         }
     }
 
-    private async Task DisplayMessage(string message)
+    private void Reset()
     {
-        this.message = message;
-        showMessage = true;
+        isLoading = false;
+        images = [];
         StateHasChanged();
+    }
 
-        // TODO: messages service
-        await Task.Delay(3000);
-
-        showMessage = false;
-        StateHasChanged();
+    private string GetPlaceholder()
+    {
+        switch (browserLanguage)
+        {
+            case "es":
+                return "gatito naranja";
+            case "en":
+                return "orange kitty";
+            default:
+                return string.Empty;
+        }
     }
 }

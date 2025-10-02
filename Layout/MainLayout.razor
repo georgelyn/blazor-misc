@@ -1,4 +1,7 @@
-﻿@inherits LayoutComponentBase
+﻿@using Misc.Services
+@inherits LayoutComponentBase
+@inject IMessagesService MessagesService
+
 <div class="page">
     <div class="sidebar">
         <NavMenu />
@@ -11,6 +14,33 @@
 
         <article class="mcontainer px-4 mb-4 pb-4">
             @Body
+
+            @if (!string.IsNullOrWhiteSpace(message))
+            {
+                <div class="message-area shadow mt-5">
+                    @message
+                </div>
+            }
         </article>
     </main>
 </div>
+
+@code {
+    private string? message;
+
+    protected override void OnInitialized()
+    {
+        MessagesService.OnMessageChanged += HandleMessage;
+    }
+
+    public void Dispose()
+    {
+        MessagesService.OnMessageChanged -= HandleMessage;
+    }
+
+    private void HandleMessage(string? msg, bool? isError = false)
+    {
+        message = msg;
+        InvokeAsync(StateHasChanged);
+    }
+}

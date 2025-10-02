@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="Home" xml:space="preserve">
+    <value>Inicio</value>
+  </data>
+  <data name="NavConverter" xml:space="preserve">
+    <value>Clase C# a Json</value>
+  </data>
+  <data name="NavFormatter" xml:space="preserve">
+    <value>Formatear Json</value>
+  </data>
+  <data name="NavStringUtilities" xml:space="preserve">
+    <value>Utilidades de strings</value>
+  </data>
+  <data name="NavImageSearch" xml:space="preserve">
+    <value>Buscar imagen</value>
+  </data>
+  <data name="PageConverter" xml:space="preserve">
+    <value>Clase C# a JSON</value>
+  </data>
+  <data name="PageFormatter" xml:space="preserve">
+    <value>Formatear JSON</value>
+  </data>
+  <data name="PageStringUtilities" xml:space="preserve">
+    <value>Utilidades de strings</value>
+  </data>
+  <data name="PageImageSearch" xml:space="preserve">
+    <value>Buscar imagen</value>
+  </data>
+  <data name="ConverterMainInfo" xml:space="preserve">
+    <value>Para clases POCO: para que las propiedades se identifiquen correctamente, deben ser públicas y contar con el getter por defecto (get;)..</value>
+  </data>
+  <data name="ConverterTextTitle" xml:space="preserve">
+    <value>Clase C#</value>
+  </data>
+  <data name="ConverterCopyText" xml:space="preserve">
+    <value>Copiar texto</value>
+  </data>
+  <data name="Copy" xml:space="preserve">
+    <value>Copiar</value>
+  </data>
+  <data name="ConverterCopyDoneBtn" xml:space="preserve">
+    <value>Texto copiado</value>
+  </data>
+  <data name="ConverterFormatJson" xml:space="preserve">
+    <value>Formatear JSON</value>
+  </data>
+  <data name="Format" xml:space="preserve">
+    <value>Formatear</value>
+  </data>
+  <data name="Convert" xml:space="preserve">
+    <value>Convertir</value>
+  </data>
+  <data name="FormatterTextTitle" xml:space="preserve">
+    <value>JSON</value>
+  </data>
+  <data name="JsonNotValid" xml:space="preserve">
+    <value>No es un JSON válido</value>
+  </data>
+  <data name="RemoveWhiteSpace" xml:space="preserve">
+    <value>Quitar espacios en blanco</value>
+  </data>
+  <data name="Delimiter" xml:space="preserve">
+    <value>Delimitador</value>
+  </data>
+  <data name="StringSplitJsonTextTitle" xml:space="preserve">
+    <value>Separar/unir strings</value>
+  </data>
+  <data name="SplitPlaceholder" xml:space="preserve">
+    <value>Coma (,) por defecto</value>
+  </data>
+  <data name="StringReplaceTextTitle" xml:space="preserve">
+    <value>Reemplazar string</value>
+  </data>
+  <data name="Replace" xml:space="preserve">
+    <value>Reemplazar</value>
+  </data>
+  <data name="With" xml:space="preserve">
+    <value>Con</value>
+  </data>
+  <data name="Split" xml:space="preserve">
+    <value>Separar</value>
+  </data>
+  <data name="Join" xml:space="preserve">
+    <value>Unir</value>
+  </data>
+  <data name="ImageSearchTextTitle" xml:space="preserve">
+    <value>Buscar imágenes</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Cargando</value>
+  </data>
+  <data name="SearchOnWeb" xml:space="preserve">
+    <value>Buscar en Pixabay</value>
+  </data>
+  <data name="ImagesNotFound" xml:space="preserve">
+    <value>No se han encontrado imágenes. Prueba con palabras clave diferentes</value>
+  </data>
+  <data name="AnErrorHasOccurred" xml:space="preserve">
+    <value>Ha ocurrido un error</value>
+  </data>
+  <data name="Page" xml:space="preserve">
+    <value>Pág.</value>
+  </data>
+  <data name="Next" xml:space="preserve">
+    <value>Siguiente</value>
+  </data>
+  <data name="Prev" xml:space="preserve">
+    <value>Anterior</value>
+  </data>
+</root>

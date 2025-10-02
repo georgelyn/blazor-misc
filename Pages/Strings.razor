@@ -2,39 +2,37 @@
 
 @using Misc.Shared.Components
 @using Misc.Shared.Models
+@using Microsoft.Extensions.Localization
+@using Misc.Resources
+@inject IStringLocalizer<Resources> L
 
-<PageTitle>Strings Utilities</PageTitle>
+<PageTitle>@L["PageStringUtilities"]</PageTitle>
 
 <div class="container d-flex flex-column gap-5">
-    <TextAreaWithAction 
-        Title="Split/Join String" 
-        @bind-Value="splitJoinValue" 
-        Buttons="splitJoinButtons">
+    <TextAreaWithAction Title="@L["StringSplitJsonTextTitle"]" @bind-Value="splitJoinValue" Buttons="splitJoinButtons">
 
         <OptionalContainerContent>
             <div class="d-flex flex-column gap-3">
                 <div class="d-flex justify-content-end container-input-label">
-                    <label for="split-choice-txt" class="col-sm-2 col-form-label max-w-100px">Delimiter</label>
-                    <input type="text" class="form-control max-w-300px" id="split-choice-txt" placeholder="Comma (,) by default" @bind="delimiter">
+                    <label for="split-choice-txt" class="col-sm-2 col-form-label max-w-100px">@L["Delimiter"]</label>
+                    <input type="text" class="form-control max-w-300px" id="split-choice-txt"
+                        placeholder="@L["SplitPlaceholder"]" @bind="delimiter">
                 </div>
             </div>
         </OptionalContainerContent>
     </TextAreaWithAction>
 
-    <TextAreaWithAction 
-        Title="Replace String" 
-        @bind-Value="replaceValue" 
-        Buttons="replaceButtons">
+    <TextAreaWithAction Title="@L["StringReplaceTextTitle"]" @bind-Value="replaceValue" Buttons="replaceButtons">
 
         <OptionalContainerContent>
             <div class="d-flex flex-column gap-3">
                 <div class="d-flex justify-content-end container-input-label">
-                    <label for="replace-from-txt" class="col-sm-2 col-form-label max-w-100px">Replace</label>
+                    <label for="replace-from-txt" class="col-sm-2 col-form-label max-w-100px">@L["Replace"]</label>
                     <input type="text" class="form-control max-w-300px" id="replace-from-txt" @bind="replaceFrom">
                 </div>
                 <div class="d-flex justify-content-end container-input-label">
-                    <label for="replace-with-txt" class="col-sm-2 col-form-label max-w-100px">With</label>
-                    <input type="text" class="form-control max-w-300px" id="replace-with-txt" @bind="replaceWith">                
+                    <label for="replace-with-txt" class="col-sm-2 col-form-label max-w-100px">@L["With"]</label>
+                    <input type="text" class="form-control max-w-300px" id="replace-with-txt" @bind="replaceWith">
                 </div>
             </div>
         </OptionalContainerContent>
@@ -47,20 +45,20 @@
     private string delimiter = string.Empty;
     private string replaceFrom = string.Empty;
     private string replaceWith = string.Empty;
-    private readonly IEnumerable<Button> splitJoinButtons;
-    private readonly IEnumerable<Button> replaceButtons;
+    private List<Button> splitJoinButtons = new();
+    private List<Button> replaceButtons = new();
 
-    public Strings(IEnumerable<Button> buttons)
+    protected override void OnInitialized()
     {
-        this.splitJoinButtons = new List<Button>() 
+        this.splitJoinButtons = new List<Button>()
         {
-            new Button(1, "Split", EventCallback.Factory.Create(this, Split)), 
-            new Button(2, "Join", EventCallback.Factory.Create(this, Join)), 
+            new Button(1, @L["Split"], EventCallback.Factory.Create(this, Split)),
+            new Button(2, @L["Join"], EventCallback.Factory.Create(this, Join)),
         };
 
-        this.replaceButtons = new List<Button>() 
+        this.replaceButtons = new List<Button>()
         {
-            new Button(1, "Replace", EventCallback.Factory.Create(this, Replace)), 
+            new Button(1, @L["Replace"], EventCallback.Factory.Create(this, Replace)),
         };
     }
 

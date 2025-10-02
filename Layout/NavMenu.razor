@@ -1,4 +1,8 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+﻿@using Microsoft.Extensions.Localization
+@using Misc.Resources
+@inject IStringLocalizer<Resources> L
+
+<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="">Miscellaneous</a>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
@@ -11,27 +15,27 @@
     <nav class="nav flex-column">
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi material-icons">home</span> Home
+                <span class="bi material-icons">home</span> @L["Home"]
             </NavLink>
         </div>
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="convert">
-                <span class="bi material-icons">data_object</span> C# Class to JSON
+                <span class="bi material-icons">data_object</span> @L["NavConverter"]
             </NavLink>
         </div>
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="formatter">
-                <span class="bi material-icons">format_align_justify</span> JSON Formatter
+                <span class="bi material-icons">format_align_justify</span> @L["NavFormatter"]
             </NavLink>
         </div>
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="strings">
-                <span class="bi material-icons">text_format</span> String Utilities
+                <span class="bi material-icons">text_format</span> @L["NavStringUtilities"]
             </NavLink>
         </div>
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="images">
-                <span class="bi material-icons">image_search</span> Image Search
+                <span class="bi material-icons">image_search</span> @L["NavImageSearch"]
             </NavLink>
         </div>
     </nav>

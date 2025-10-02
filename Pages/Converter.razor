@@ -6,16 +6,19 @@
 @using System.Text
 @using System.Text.RegularExpressions
 @using System.ComponentModel.DataAnnotations.Schema
+@using Microsoft.Extensions.Localization
+@using Misc.Resources
+@inject IStringLocalizer<Resources> L
 
-<PageTitle>C# Class to Json</PageTitle>
+<PageTitle>@L["PageConverter"]</PageTitle>
 
 <div class ="container">
     <div class="mb-4">
-        <Info Text="To be used with POCO classes. To correctly identify properties, they must be set as public and include the standard getter ( get; )." />
+        <Info Text="@L["ConverterMainInfo"]" />
     </div>
 
     <TextAreaWithAction 
-        Title="C# Class" 
+        Title="@L["ConverterTextTitle"]" 
         @bind-Value="@classString" 
         Buttons="buttons" />
 
@@ -26,13 +29,13 @@
                 <pre id="copy-text" class="copy-text">@json</pre>    
             </MainContent>
             <ActionContent>
-                <button type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="Copy text"
+                <button type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="@L["ConverterCopyText"]"
                     @onclick="CopyText">
-                    @(isCopied ? "Text copied" : "Copy")
+                    @(isCopied ? @L["ConverterCopyDoneBtn"] : @L["Copy"])
                 </button>
-                <button type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="Format JSON"
+                <button type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="@L["ConverterFormatJson"]"
                     @onclick="FormatJson">
-                    Format
+                    @L["Format"]
                 </button>
             </ActionContent>
         </ResponseWithAction>
@@ -46,13 +49,13 @@
     private string json = string.Empty;
     private bool isCopied = false;
     private string dataTypePattern = @"public\s+([\w<>\[\],\s?]+)\s+(\w+)";
-    private readonly IEnumerable<Button> buttons;
+    private List<Button> buttons = new ();
 
-    public Converter(IEnumerable<Button> buttons)
+    protected override void OnInitialized()
     {
-        this.buttons = new List<Button>() 
+        buttons = new()
         {
-            new Button(1, "Convert", EventCallback.Factory.Create(this, Convert)), 
+            new Button(1, L["Convert"], EventCallback.Factory.Create(this, Convert))
         };
     }
 

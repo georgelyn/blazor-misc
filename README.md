@@ -11,16 +11,21 @@ A basic toolkit of my frequently used utilities and helpers, built with Blazor W
 
 ## Setup
 
+As a first step, clone the repository:
+```sh
+git clone <repository>
+```
+
 ### Running with Docker
 
-Both a `Dockerfile` and `docker-compose.yml`, as well as a basic `nginx` configuration file are included.
+Both a `Dockerfile` and `docker-compose.yml`, as well as a basic `nginx` configuration file are provided.
 
-You need to have [Docker](https://docs.docker.com/engine/install) installed.
-And then just run:
+You need to have [Docker](https://docs.docker.com/engine/install) and [Docker Compose](https://docs.docker.com/compose) installed.
+Once they're installed, just run from the root directory:
 
 ```sh
-$ docker compose build # It creates the container as defined by the Dockerfile
-$ docker compose up -d # It runs the container
+$ docker compose build # It builds the image as defined by the Dockerfile
+$ docker compose up -d # It creates and runs the container
 ```
 
 The app can be accesed at http://localhost:5097.
@@ -29,13 +34,13 @@ The app can be accesed at http://localhost:5097.
 
 To run the application, you need to install [.NET](https://learn.microsoft.com/en-us/dotnet/core/install) (version 9.0).
 
-To run the application:
+To run the application, execute from the root directory:
 
 ```sh
 $ dotnet run # It compiles, intalls the dependencies and executes the project
 ```
 
-Alternatively you can use the command `watch`, which will "watch" for changes to apply them automatically. Although depending on what changes are made, with WASM apps it's not 100% reliable.
+Alternatively you can use the command `watch`, which will "watch" for changes to apply them automatically. Although depending on what changes are made, with WASM apps it's not 100% reliable so sometimes you’ll need to restart the application.
 ```sh
 $ dotnet watch
 ```
