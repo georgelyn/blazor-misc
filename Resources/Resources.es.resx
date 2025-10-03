@@ -108,4 +108,7 @@
   <data name="Prev" xml:space="preserve">
     <value>Anterior</value>
   </data>
+  <data name="SearchImagePlaceholder" xml:space="preserve">
+    <value>gatito naranja</value>
+  </data>
 </root>

@@ -2,11 +2,8 @@
 
 @using Misc.Services
 @using System.Threading.Tasks
-@using Misc.Shared.Components
-@using Misc.Shared.Models
 @using System.Reflection.Metadata
-@using Microsoft.Extensions.Localization
-@using Misc.Resources
+@using System.Globalization
 @inject IStringLocalizer<Resources> L
 @inject IImagesService ImagesService
 @inject IMessagesService MessagesService
@@ -45,17 +42,9 @@
     protected override void OnInitialized()
     {
         this.button = new Button(1, @L["SearchOnWeb"], EventCallback.Factory.Create(this, () => Search(1)));
-    }
+        placeholder = @L["SearchImagePlaceholder"];
 
-    protected override async Task OnInitializedAsync()
-    {
-        var lang = await JS.InvokeAsync<string>("eval", "navigator.language");
-        if (string.IsNullOrWhiteSpace(lang) || lang.Split("-").Length == 0)
-            browserLanguage = "en";
-        else
-            browserLanguage = lang.Split("-")[0];
-
-        placeholder = GetPlaceholder();
+        browserLanguage = CultureInfo.CurrentCulture.TwoLetterISOLanguageName;
     }
 
     private async Task Search(int page)
@@ -95,18 +84,5 @@
         isLoading = false;
         images = [];
         StateHasChanged();
-    }
-
-    private string GetPlaceholder()
-    {
-        switch (browserLanguage)
-        {
-            case "es":
-                return "gatito naranja";
-            case "en":
-                return "orange kitty";
-            default:
-                return string.Empty;
-        }
     }
 }

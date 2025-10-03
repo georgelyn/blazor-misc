@@ -1,7 +1,4 @@
-@using Misc.Shared.Models
 @using System.ComponentModel.DataAnnotations.Schema
-@using Microsoft.Extensions.Localization
-@using Misc.Resources
 @inject IStringLocalizer<Resources> L
 
 <div class="mt-5">
@@ -9,7 +6,7 @@
         @foreach (var image in Images)
         {
             <div class="col pb-3 img-container">
-                <a href="@image.LargeImageUrl" target="_blank">
+                <a href="@image.LargeImageUrl" target="_blank" loading="lazy">
                     <img src="@image.WebformatUrl" class="img-fluid object-fit-cover" />
                 </a>
             </div>
