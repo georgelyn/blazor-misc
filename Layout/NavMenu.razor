@@ -1,4 +1,6 @@
-﻿@inject IStringLocalizer<Resources> L
+﻿@inject NavigationManager Nav
+
+@inject IStringLocalizer<Resources> L
 
 <div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
@@ -27,9 +29,22 @@
             </NavLink>
         </div>
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="strings">
+            <button class="nav-link strings-menu" @onclick="ToggleStringsMenu" @onclick:stopPropagation>
                 <span class="bi material-icons">text_format</span> @L["NavStringUtilities"]
-            </NavLink>
+                <span class="material-icons submenu-icon @(showStringsMenu ? "rotate" : "")">
+                    expand_more
+                </span>
+            </button>
+
+            @if (showStringsMenu)
+            {
+                <nav class="nav flex-column ms-4">
+                    <NavLink class="nav-link" href="strings/split"> @L["NavStringSplitJoin"] </NavLink>
+                    <NavLink class="nav-link" href="strings/replace"> @L["NavStringReplace"] </NavLink>
+                    <NavLink class="nav-link" href="strings/order"> @L["NavStringOrder"] </NavLink>
+                    <NavLink class="nav-link" href="strings/unique"> @L["NavStringUnique"] </NavLink>
+                </nav>
+            }
         </div>
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="images">
@@ -41,11 +56,25 @@
 
 @code {
     private bool collapseNavMenu = true;
-
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+    private bool showStringsMenu;
+
+    protected override void OnInitialized()
+    {
+        var currentPath = Nav.ToBaseRelativePath(Nav.Uri);
+        if (currentPath.StartsWith("strings"))
+        {
+            showStringsMenu = true;
+        }
+    }
 
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
     }
+
+    void ToggleStringsMenu() 
+    {
+        showStringsMenu = !showStringsMenu;
+    } 
 }

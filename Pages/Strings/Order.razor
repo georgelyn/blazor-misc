@@ -1,0 +1,51 @@
+@page "/strings/order"
+
+@using System.Globalization
+@using NaturalSort.Extension
+
+@inject IStringLocalizer<Resources> L
+
+<PageTitle>@L["PageStringUtilities"]</PageTitle>
+
+<div class="container d-flex flex-column gap-5">
+    <TextAreaWithAction Title="@L["StringOrderTextTitle"]" @bind-Value="value" Buttons="buttons">
+        <OptionalContainerContent>
+            <div class="d-flex flex-row gap-3 justify-content-end">
+                <InputRadioGroup @bind-Value="sortDir">
+                    <InputRadio Value=@("asc") /> @L["Ascending"]
+                    <InputRadio Value=@("desc") /> @L["Descending"]
+                </InputRadioGroup>
+            </div>
+        </OptionalContainerContent>
+    </TextAreaWithAction>
+</div>
+
+@code {
+    private string value = string.Empty;
+    private string sortDir = "asc";
+    private List<Button> buttons = new();
+
+    protected override void OnInitialized()
+    {
+        this.buttons = new List<Button>()
+        {
+            new Button(1, @L["Order"], EventCallback.Factory.Create(this, Action)),
+        };
+    }
+
+    private void Action()
+    {
+        if (string.IsNullOrWhiteSpace(value))
+            return;
+
+        var lines = value.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries)
+            .Select(l => l.Trim())
+            .ToArray();
+
+        var ordered = sortDir == "asc"
+            ? lines.OrderBy(x => x, StringComparison.OrdinalIgnoreCase.WithNaturalSort())
+            : lines.OrderByDescending(x => x, StringComparison.OrdinalIgnoreCase.WithNaturalSort());
+
+        value = string.Join(Environment.NewLine, ordered);
+    }
+}

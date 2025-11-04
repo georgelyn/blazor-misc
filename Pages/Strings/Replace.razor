@@ -1,0 +1,45 @@
+@page "/strings/replace"
+
+@inject IStringLocalizer<Resources> L
+
+<PageTitle>@L["PageStringUtilities"]</PageTitle>
+
+<div class="container d-flex flex-column gap-5">
+    <TextAreaWithAction Title="@L["StringReplaceTextTitle"]" @bind-Value="replaceValue" Buttons="replaceButtons">
+        <OptionalContainerContent>
+            <div class="d-flex flex-column gap-3">
+                <div class="d-flex justify-content-end container-input-label">
+                    <label for="replace-from-txt" class="col-sm-2 col-form-label max-w-100px">@L["Replace"]</label>
+                    <input type="text" class="form-control max-w-300px" id="replace-from-txt" @bind="replaceFrom">
+                </div>
+                <div class="d-flex justify-content-end container-input-label">
+                    <label for="replace-with-txt" class="col-sm-2 col-form-label max-w-100px">@L["With"]</label>
+                    <input type="text" class="form-control max-w-300px" id="replace-with-txt" @bind="replaceWith">
+                </div>
+            </div>
+        </OptionalContainerContent>
+    </TextAreaWithAction>
+</div>
+
+@code {
+    private string replaceValue = string.Empty;
+    private string delimiter = string.Empty;
+    private string replaceFrom = string.Empty;
+    private string replaceWith = string.Empty;
+    private List<Button> replaceButtons = new();
+
+    protected override void OnInitialized()
+    {
+        this.replaceButtons = new List<Button>()
+        {
+            new Button(1, @L["Replace"], EventCallback.Factory.Create(this, Action)),
+        };
+    }
+    private void Action()
+    {
+        if (!string.IsNullOrWhiteSpace(replaceValue))
+        {
+            replaceValue = replaceValue.Replace(replaceFrom, replaceWith);
+        }
+    }
+}

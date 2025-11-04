@@ -111,4 +111,34 @@
   <data name="SearchImagePlaceholder" xml:space="preserve">
     <value>orange kitty</value>
   </data>
+  <data name="NavStringSplitJoin" xml:space="preserve">
+    <value>Split/Join</value>
+  </data>
+  <data name="NavStringReplace" xml:space="preserve">
+    <value>Replace</value>
+  </data>
+  <data name="NavStringOrder" xml:space="preserve">
+    <value>Order</value>
+  </data>
+  <data name="NavStringUnique" xml:space="preserve">
+    <value>Remove duplicates</value>
+  </data>
+  <data name="StringRemoveDupliatesTextTitle" xml:space="preserve">
+    <value>Remove duplicates</value>
+  </data>
+  <data name="RemoveDuplicates" xml:space="preserve">
+    <value>Remove duplicates</value>
+  </data>
+  <data name="StringOrderTextTitle" xml:space="preserve">
+    <value>Order string</value>
+  </data>
+  <data name="Order" xml:space="preserve">
+    <value>Order</value>
+  </data>
+  <data name="Ascending" xml:space="preserve">
+    <value>Ascending</value>
+  </data>
+  <data name="Descending" xml:space="preserve">
+    <value>Descending</value>
+  </data>
 </root>

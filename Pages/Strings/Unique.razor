@@ -1,0 +1,30 @@
+@page "/strings/unique"
+
+@inject IStringLocalizer<Resources> L
+
+<PageTitle>@L["PageStringUtilities"]</PageTitle>
+
+<div class="container d-flex flex-column gap-5">
+    <TextAreaWithAction Title="@L["StringRemoveDupliatesTextTitle"]" @bind-Value="value" Buttons="buttons">
+    </TextAreaWithAction>
+</div>
+
+@code {
+    private string value = string.Empty;
+    private List<Button> buttons = new();
+
+    protected override void OnInitialized()
+    {
+        this.buttons = new List<Button>()
+        {
+            new Button(1, @L["RemoveDuplicates"], EventCallback.Factory.Create(this, RemoveDuplicates)),
+        };
+    }
+
+    private void RemoveDuplicates()
+    {
+        string[] lines = value.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+        var unique = new HashSet<string>(lines);
+        value = string.Join(Environment.NewLine, unique);
+    }
+}

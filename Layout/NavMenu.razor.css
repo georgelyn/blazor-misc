@@ -52,6 +52,28 @@
     color: white;
 }
 
+.strings-menu {
+    color: #d7d7d7;
+    background: none;
+    border: none;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    line-height: 3rem;
+    padding-left: 1rem;
+    width: 100%;
+}
+
+.submenu-icon {
+    transition: transform 0.2s ease;
+    margin-left: 8px; 
+    font-size: 1.1rem;
+}
+
+.submenu-icon.rotate {
+    transform: rotate(180deg);
+}
+
 @media (min-width: 641px) {
     .navbar-toggler {
         display: none;
