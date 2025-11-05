@@ -10,10 +10,16 @@
 <div class="container d-flex flex-column gap-5">
     <TextAreaWithAction Title="@L["StringOrderTextTitle"]" @bind-Value="value" Buttons="buttons">
         <OptionalContainerContent>
-            <div class="d-flex flex-row gap-3 justify-content-end">
+            <div class="d-flex flex-row justify-content-end gap-3">
                 <InputRadioGroup @bind-Value="sortDir">
-                    <InputRadio Value=@("asc") /> @L["Ascending"]
-                    <InputRadio Value=@("desc") /> @L["Descending"]
+                    <label class="d-flex gap-2">
+                        <InputRadio Value=@("asc") />
+                        @L["Ascending"]
+                    </label>
+                    <label class="d-flex gap-2">
+                        <InputRadio Value=@("desc") />
+                        @L["Descending"]
+                    </label>
                 </InputRadioGroup>
             </div>
         </OptionalContainerContent>

@@ -1,5 +1,4 @@
 ﻿@inject NavigationManager Nav
-
 @inject IStringLocalizer<Resources> L
 
 <div class="top-row ps-3 navbar navbar-dark">
@@ -13,59 +12,53 @@
 
 <div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
     <nav class="nav flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi material-icons">home</span> @L["Home"]
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="convert">
-                <span class="bi material-icons">data_object</span> @L["NavConverter"]
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="formatter">
-                <span class="bi material-icons">format_align_justify</span> @L["NavFormatter"]
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <button class="nav-link strings-menu" @onclick="ToggleStringsMenu" @onclick:stopPropagation>
-                <span class="bi material-icons">text_format</span> @L["NavStringUtilities"]
-                <span class="material-icons submenu-icon @(showStringsMenu ? "rotate" : "")">
-                    expand_more
-                </span>
-            </button>
+        @foreach (var item in navItems)
+        {
+            <div class="nav-item px-3">
+                @if (item.Children != null && item.Children.Any())
+                {
+                    <button class="nav-link strings-menu" 
+                        @onclick="(() => ToggleMenu(item.Key))"
+                        @onclick:stopPropagation>
+                        <span class="bi material-icons">@item.Icon</span> @item.Title
+                        <span class="material-icons submenu-icon @(expandedMenu == item.Key ? "rotate" : "")">
+                            expand_more
+                        </span>
+                    </button>
 
-            @if (showStringsMenu)
-            {
-                <nav class="nav flex-column ms-4">
-                    <NavLink class="nav-link" href="strings/split"> @L["NavStringSplitJoin"] </NavLink>
-                    <NavLink class="nav-link" href="strings/replace"> @L["NavStringReplace"] </NavLink>
-                    <NavLink class="nav-link" href="strings/order"> @L["NavStringOrder"] </NavLink>
-                    <NavLink class="nav-link" href="strings/unique"> @L["NavStringUnique"] </NavLink>
-                </nav>
-            }
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="images">
-                <span class="bi material-icons">image_search</span> @L["NavImageSearch"]
-            </NavLink>
-        </div>
+                    @if (expandedMenu == item.Key)
+                    {
+                        <nav class="nav flex-column ms-4">
+                            @foreach (var child in item.Children)
+                            {
+                                <NavLink class="nav-link" href="@child.Href"> @child.Title</NavLink>
+                            }
+                        </nav>
+                    }
+                }
+                else {
+                    <NavLink class="nav-link" href="@item.Href" Match="@(item.Href == "/" ? NavLinkMatch.All : NavLinkMatch.Prefix)">
+                        <span class="bi material-icons">@item.Icon</span> @item.Title
+                    </NavLink>
+                }
+            </div>
+        }
     </nav>
 </div>
 
 @code {
     private bool collapseNavMenu = true;
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
-    private bool showStringsMenu;
+    private string? expandedMenu = string.Empty;
+    private IEnumerable<NavItem> navItems = Array.Empty<NavItem>();
 
     protected override void OnInitialized()
     {
+        SetNavItems();
         var currentPath = Nav.ToBaseRelativePath(Nav.Uri);
-        if (currentPath.StartsWith("strings"))
-        {
-            showStringsMenu = true;
-        }
+        var menu = navItems.FirstOrDefault(n => n.Children != null && n.Children.Any(c => c.Href == currentPath));
+        if (menu != null)
+            expandedMenu = menu.Key;
     }
 
     private void ToggleNavMenu()
@@ -73,8 +66,29 @@
         collapseNavMenu = !collapseNavMenu;
     }
 
-    void ToggleStringsMenu() 
+    private void ToggleMenu(string key)
     {
-        showStringsMenu = !showStringsMenu;
-    } 
+        if (expandedMenu == key)
+            expandedMenu = null;
+        else
+            expandedMenu = key;
+    }
+
+    private void SetNavItems()
+    {
+        navItems = new List<NavItem>()
+        {
+            new (@L["Home"], "home", "/", "home"),
+            new (@L["NavConverter"], "convert", "convert", "data_object"),
+            new (@L["NavFormatter"], "formatter", "formatter", "format_align_justify"),
+            new (@L["NavStringUtilities"], "strings", "", "text_format", new List<NavItem>() 
+            {
+                new(@L["NavStringSplitJoin"], "strings-split", "strings/split"),
+                new(@L["NavStringReplace"], "strings-replace", "strings/replace"),
+                new(@L["NavStringOrder"], "strings-order", "strings/order"),
+                new(@L["NavStringUnique"], "strings-unique", "strings/unique"),
+            }),
+            new(@L["NavImageSearch"], "images", "images", "image_search"),
+        };
+    }
 }
