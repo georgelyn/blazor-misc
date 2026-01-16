@@ -18,17 +18,21 @@ builder.Services.AddLocalization();
 var host = builder.Build();
 
 var js = host.Services.GetRequiredService<IJSRuntime>();
-var browserLang = await js.InvokeAsync<string>("eval", "navigator.language");
+var storedCulture = await js.InvokeAsync<string>("culture.get");
+var browserLang = await js.InvokeAsync<string>("browserLanguage");
 
-var supportedCultures = new[] { "en-US", "es-ES" };
-string cultureName = supportedCultures[0];
-if (!string.IsNullOrWhiteSpace(browserLang))
+string cultureName = "en-US";
+
+if (!string.IsNullOrWhiteSpace(storedCulture))
 {
-    var lang = browserLang.Split('-')[0];
-    cultureName = lang == "es" ? supportedCultures[1] : supportedCultures[0];
+    cultureName = storedCulture;
+}
+else if (!string.IsNullOrWhiteSpace(browserLang) && browserLang.StartsWith("es"))
+{
+    cultureName = "es-ES";
 }
 
-var culture = new CultureInfo(browserLang);
+var culture = new CultureInfo(cultureName);
 CultureInfo.DefaultThreadCurrentCulture = culture;
 CultureInfo.DefaultThreadCurrentUICulture = culture;
 

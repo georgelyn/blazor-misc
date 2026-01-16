@@ -1,0 +1,45 @@
+@using System.Globalization
+@using System.ComponentModel.DataAnnotations.Schema
+@inject IJSRuntime JS
+@inject NavigationManager Nav
+
+@if (IsMobile) {
+    <ul class="list-unstyled d-flex flex-col gap-2 justify-content-center" style="font-size: 0.8rem;">
+        <li class="@(SelectedCulture == "en" ? "text-decoration-underline" : string.Empty)" @onclick="@(() => SelectedCulture = "en")" style="cursor:pointer;">English</li>
+        <li class="@(SelectedCulture == "es" ? "text-decoration-underline" : string.Empty)" @onclick="@(() => SelectedCulture = "es")" style="cursor:pointer;">Español</li>
+    </ul>
+} else {
+    <select class="form-select form-select-sm w-auto"
+            @bind="SelectedCulture"
+            @bind:event="onchange">
+        <option value="en">English</option>
+        <option value="es">Español</option>
+    </select>
+}
+
+@code {
+    [Parameter]
+    public bool IsMobile { get; set; } = false;
+    private string _selectedCulture =
+        CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+
+    private string SelectedCulture
+    {
+        get => _selectedCulture;
+        set
+        {
+            if (_selectedCulture == value)
+                return;
+
+            _selectedCulture = value;
+            _ = ChangeLanguageAsync();
+        }
+    }
+
+    private async Task ChangeLanguageAsync()
+    {
+        Console.WriteLine(_selectedCulture);
+        await JS.InvokeVoidAsync("culture.set", _selectedCulture);
+        Nav.NavigateTo(Nav.Uri, forceLoad: true);
+    }
+}
