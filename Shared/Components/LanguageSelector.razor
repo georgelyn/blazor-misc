@@ -9,12 +9,25 @@
         <li class="@(SelectedCulture == "es" ? "text-decoration-underline" : string.Empty)" @onclick="@(() => SelectedCulture = "es")" style="cursor:pointer;">Español</li>
     </ul>
 } else {
-    <select class="form-select form-select-sm w-auto"
-            @bind="SelectedCulture"
-            @bind:event="onchange">
-        <option value="en">English</option>
-        <option value="es">Español</option>
-    </select>
+    <div class="d-flex gap-3 align-items-center">
+        <div class="lang-container @(SelectedCulture == "en" ? "lang-selected" : string.Empty)" 
+            @onclick="@(() => SelectedCulture = "en")">
+            <img src="img/en.png"
+                alt="English"
+                class="lang-flag"
+                 />
+            <span class="lang-text">EN</span>
+        </div>
+    
+        <div class="lang-container @(SelectedCulture == "es" ? "lang-selected" : string.Empty)" 
+            @onclick="@(() => SelectedCulture = "es")">
+            <img src="img/es.png"
+                alt="Español"
+                class="lang-flag"
+                 />
+            <span class="lang-text">ES</span>
+        </div>
+    </div>
 }
 
 @code {

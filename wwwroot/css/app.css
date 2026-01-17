@@ -193,6 +193,14 @@ code {
     gap: 15px;
 }
 
+.language-desktop {
+    display: none;
+}
+
+.language-mobile {
+    display: block;
+}
+
 @media (max-width: 640.98px) {
     .container-input-label {
         flex-direction: column;
@@ -211,5 +219,15 @@ code {
 
     .message-area {
         width: 100%;
+    }
+}
+
+@media (min-width: 768px) {
+    .language-desktop {
+        display: block;
+    }
+
+    .language-mobile {
+        display: none;
     }
 }

@@ -1,0 +1,11 @@
+.lang-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    opacity: 0.5;
+}
+
+.lang-selected {
+    opacity: 1;
+}

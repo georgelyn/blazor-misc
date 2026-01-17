@@ -44,9 +44,9 @@
             </div>
         }
 
-        @if (isMobile) {
+        <div class="language-mobile">
             <LanguageSelector IsMobile=true />
-        }
+        </div>
     </nav>
 </div>
 
@@ -55,7 +55,6 @@
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
     private string? expandedMenu = string.Empty;
     private IEnumerable<NavItem> navItems = Array.Empty<NavItem>();
-    private bool isMobile = false;
 
     protected override void OnInitialized()
     {
@@ -64,14 +63,11 @@
         var menu = navItems.FirstOrDefault(n => n.Children != null && n.Children.Any(c => c.Href == currentPath));
         if (menu != null)
             expandedMenu = menu.Key;
-
-        isMobile = !collapseNavMenu;
     }
 
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
-        isMobile = !collapseNavMenu;
     }
 
     private void ToggleMenu(string key)
